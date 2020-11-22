@@ -4,3 +4,7 @@ output_files
 clocks
 db
 incremental_db
+
+*.bak
+*.qws
+greybox_tmp

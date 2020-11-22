@@ -1,0 +1,5 @@
+PLL_Name	ZXNEXT_Cyclone_V:ZXNEXT_Cyclone_V|clocks:clocks_inst|altpll:altpll_component|clocks_altpll:auto_generated|pll1
+PLLJITTER	NA
+PLLSPEmax	84
+PLLSPEmin	-53
+

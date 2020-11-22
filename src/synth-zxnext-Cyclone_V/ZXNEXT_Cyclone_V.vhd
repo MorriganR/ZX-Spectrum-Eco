@@ -40,17 +40,23 @@ entity ZXNEXT_Cyclone_V is
    );
    port (
       -- Clocks
-      clock_50_i        : in    std_logic;
+      CLOCK_50_I        : in    std_logic;
 
       -- SRAM (AS7C34096)
-    ram_addr_o        : out   std_logic_vector(18 downto 0)  := (others => '0');
-    ram_data_io_zxdos : inout std_logic_vector(7 downto 0)  := (others => 'Z');
-    ram1_we_n_o        : out   std_logic                      := '1';
+    RAM_CLK            : out   std_logic                      := '1';
+    RAM_ADDR_O         : out   std_logic_vector(18 downto 0)  := (others => '0');
+    RAM_OE_N_O         : out   std_logic                      := '1';
+    RAM_WE_ALL_N_O     : out   std_logic                      := '1';
+    RAM_WE_BYTE_N_O    : out   std_logic_vector(3 downto 0)  := (others => '1');
+    RAMA_DATA_IO_ZXDOS : inout std_logic_vector(7 downto 0)  := (others => 'Z');
+    RAMB_DATA_IO_ZXDOS : inout std_logic_vector(7 downto 0)  := (others => 'Z');
+    RAMC_DATA_IO_ZXDOS : inout std_logic_vector(7 downto 0)  := (others => 'Z');
+    RAMD_DATA_IO_ZXDOS : inout std_logic_vector(7 downto 0)  := (others => 'Z');
+    RAM1_WE_N_O        : out   std_logic                      := '1';
 
       -- SRAM2
      ram2_addr_o        : out   std_logic_vector(18 downto 0)  := (others => '0');
-     ram2_data_io_zxdos : inout std_logic_vector(7 downto 0)  := (others => 'Z');
-     ram2_we_n_o        : out   std_logic                      := '1';            
+     RAM2_WE_N_O        : out   std_logic                      := '1';            
 
 		-- SDRAM	(H57V256 = 16Mx16 = 32MB)
 --		sdram_clk_o			: out   std_logic								:= '0';
@@ -116,8 +122,8 @@ entity ZXNEXT_Cyclone_V is
 --      btn_reset_n_i     : in    std_logic;
 
 --      -- Matrix keyboard
---      keyb_row_o        : out   std_logic_vector( 7 downto 0)  := (others => 'Z');
---      keyb_col_i        : in    std_logic_vector( 6 downto 0);
+      keyb_row_o        : out   std_logic_vector( 7 downto 0)  := (others => 'Z');
+      keyb_col_i        : in    std_logic_vector( 6 downto 0);
 --
 --      -- Bus
 --      bus_rst_n_io      : inout std_logic                      := 'Z';
@@ -191,22 +197,35 @@ architecture rtl of ZXNEXT_Cyclone_V is
 --   end component;
    
 	
-	 component clocks 
-	 port 
-	 (
-		
-		refclk   : in  std_logic := '0'; --  refclk.clk
-		rst      : in  std_logic := '0'; --   reset.reset
-		outclk_0 : out std_logic;        -- outclk0.clk
-		outclk_1 : out std_logic;        -- outclk1.clk
-		outclk_2 : out std_logic;        -- outclk2.clk
-		outclk_3 : out std_logic;        -- outclk3.clk
-		outclk_4 : out std_logic;        -- outclk4.clk
-		outclk_5 : out std_logic;        -- outclk5.clk
---		outclk_6 : out std_logic;        -- outclk6.clk
-		locked   : out std_logic         -- locked.export 
-	);
-	end component;
+--	 component clocks 
+--	 port 
+--	 (
+--		
+--		refclk   : in  std_logic := '0'; --  refclk.clk
+--		rst      : in  std_logic := '0'; --   reset.reset
+--		outclk_0 : out std_logic;        -- outclk0.clk
+--		outclk_1 : out std_logic;        -- outclk1.clk
+--		outclk_2 : out std_logic;        -- outclk2.clk
+--		outclk_3 : out std_logic;        -- outclk3.clk
+--		outclk_4 : out std_logic;        -- outclk4.clk
+--		outclk_5 : out std_logic;        -- outclk5.clk
+----		outclk_6 : out std_logic;        -- outclk6.clk
+--		locked   : out std_logic         -- locked.export 
+--	);
+--	end component;
+   component clocks
+      PORT
+      (
+         areset		: IN STD_LOGIC  := '0';
+         inclk0		: IN STD_LOGIC  := '0';
+         c0		: OUT STD_LOGIC ;
+         c1		: OUT STD_LOGIC ;
+         c2		: OUT STD_LOGIC ;
+         c3		: OUT STD_LOGIC ;
+         c4		: OUT STD_LOGIC ;
+         locked		: OUT STD_LOGIC 
+      );
+   end component;
 	
 	--	 component next_clocks
 --		port (-- Clock in ports
@@ -436,8 +455,9 @@ architecture rtl of ZXNEXT_Cyclone_V is
    
    signal sram_cs_n_active       : std_logic_vector(3 downto 0)   := (others => '1');
    signal sram_oe_n_active       : std_logic                      := '0';
-   signal sram_addr_active       : std_logic_vector(18 downto 0)  := (others => '0');
-   signal sram_data_active       : std_logic_vector(15 downto 0)  := (others => '0');
+   signal sram_oe2_n_active       : std_logic                      := '0';
+   signal sram_addr_active       : std_logic_vector(20 downto 0)  := (others => '0');
+   signal sram_data_active       : std_logic_vector(7 downto 0)  := (others => '0');
    signal sram_port_a_active     : std_logic                      := '0';
    signal sram_port_b_active     : std_logic                      := '0';
    signal sram_data_H_active     : std_logic                      := '0';
@@ -457,7 +477,7 @@ architecture rtl of ZXNEXT_Cyclone_V is
    --zxdos signal adaptation:
    
    signal ram_data_io            : std_logic_vector(15 downto 0)  := (others => 'Z');
-   signal ram_oe_n_o             : std_logic                      := '1';
+   --signal ram_oe_n_o             : std_logic                      := '1';
    signal ram_ce_n_o             : std_logic_vector( 3 downto 0)  := (others => '1');
    signal ram_we_n_o             : std_logic                      := '1';
    signal sram_addr_active_goma2 : std_logic_vector(20 downto 0)  := (others => '0');
@@ -619,9 +639,10 @@ architecture rtl of ZXNEXT_Cyclone_V is
    signal joyp9_i           : std_logic;
    signal joysel_o          : std_logic                      := '0';
 
-   -- zxdos Matrix keyboard adaptation
-   signal keyb_row_o        : std_logic_vector( 7 downto 0)  := (others => 'Z');
-   signal keyb_col_i        : std_logic_vector( 6 downto 0);
+--   -- zxdos Matrix keyboard adaptation
+--   signal keyb_row_o        : std_logic_vector( 7 downto 0)  := (others => 'Z');
+--   signal keyb_col_i        : std_logic_vector( 6 downto 0);
+
    -- serial communication
    
    signal zxn_i2c_scl_n_o        : std_logic;
@@ -845,7 +866,7 @@ begin
    end process;
    
    --zdos matrix keyboard
-   keyb_col_i <= "1111111";
+--   keyb_col_i <= "1111111";
    -- Bus
 
    process (CLK_28)
@@ -1101,19 +1122,32 @@ begin
 --      CLK_OUT6     => CLK_HDMI_n          -- 28 * 5 inverted
 --   );	
 
+--	clocks_inst : component clocks
+--	port map (
+--	
+--			refclk   => clock_50_i,         -- 50 Mhz
+--			rst      => '0',                -- reset
+--			
+--			outclk_0 => CLK_28,             -- 28 MHz
+--			outclk_1 => CLK_28_n,           -- 28 Mhz inverted
+--			outclk_2 => CLK_14,             -- 14 MHz
+--			outclk_3 => CLK_7,              -- 7 MHz
+--			outclk_4 => CLK_HDMI,           -- 28 * 5
+--			outclk_5 => clk112,             -- 28 * 4 = 112  
+--			--outclk_6 => sdram_clk_o,        -- 28 * 4 = 112  -90
+--			locked   => pll_locked
+--			);
 	clocks_inst : component clocks
 	port map (
 	
-			refclk   => clock_50_i,         -- 50 Mhz
-			rst      => '0',                -- reset
+			inclk0   => CLOCK_50_I,         -- 50 Mhz
+			areset      => '0',                -- reset
 			
-			outclk_0 => CLK_28,             -- 28 MHz
-			outclk_1 => CLK_28_n,           -- 28 Mhz inverted
-			outclk_2 => CLK_14,             -- 14 MHz
-			outclk_3 => CLK_7,              -- 7 MHz
-			outclk_4 => CLK_HDMI,           -- 28 * 5
-			outclk_5 => clk112,             -- 28 * 4 = 112  
-			--outclk_6 => sdram_clk_o,        -- 28 * 4 = 112  -90
+			c0 => CLK_28,             -- 28 MHz
+			c1 => CLK_28_n,           -- 28 Mhz inverted
+			c2 => CLK_14,             -- 14 MHz
+			c3 => CLK_7,              -- 7 MHz
+			c4 => CLK_HDMI,           -- 3.5 MHz
 			locked   => pll_locked
 			);
 
@@ -1131,39 +1165,40 @@ begin
       end if;
    end process;
 
-   BUFGMUX1_i0 : entity work.BUFGMUX1
-   port map
-   (
-      I0 => CLK_3M5_CONT,
-      I1 => CLK_7,
-      S => zxn_cpu_speed(0),
-      O => CLK_i0
-   );
-
---	CLK_i0 <= CLK_7 when zxn_cpu_speed(0) = '1' else CLK_3M5_CONT;
-
-
-   BUFGMUX1_i1 : entity work.BUFGMUX1
-   port map
-   (
-      I0 => CLK_14,
-      I1 => CLK_28,
-      S => zxn_cpu_speed(0),
-      O => CLK_i1
-   );
-   
---	CLK_i1 <= CLK_28 when zxn_cpu_speed(0) = '1' else CLK_14;
-
-	
-   BUFGMUX1_i2 : entity work.BUFGMUX1
-   port map
-   (
-      I0 => CLK_i0,
-      I1 => CLK_i1,
-      S => zxn_cpu_speed(1),
-      O => CLK_CPU
-   );
-
+   CLK_CPU <= CLK_14;
+--   BUFGMUX1_i0 : entity work.BUFGMUX1
+--   port map
+--   (
+--      I0 => CLK_3M5_CONT,
+--      I1 => CLK_7,
+--      S => zxn_cpu_speed(0),
+--      O => CLK_i0
+--   );
+--
+----	CLK_i0 <= CLK_7 when zxn_cpu_speed(0) = '1' else CLK_3M5_CONT;
+--
+--
+--   BUFGMUX1_i1 : entity work.BUFGMUX1
+--   port map
+--   (
+--      I0 => CLK_14,
+--      I1 => CLK_28,
+--      S => zxn_cpu_speed(0),
+--      O => CLK_i1
+--   );
+--   
+----	CLK_i1 <= CLK_28 when zxn_cpu_speed(0) = '1' else CLK_14;
+--
+--	
+--   BUFGMUX1_i2 : entity work.BUFGMUX1
+--   port map
+--   (
+--      I0 => CLK_i0,
+--      I1 => CLK_i1,
+--      S => zxn_cpu_speed(1),
+--      O => CLK_CPU
+--   );
+--
 --	CLK_CPU <= CLK_i1 when zxn_cpu_speed(1) = '1' else CLK_i0;
 	
    -- Clock Enables
@@ -1179,6 +1214,7 @@ begin
    CLK_28_DEBOUNCE_EN <= '1' when clk_28_div(17 downto 0) = ("11" & X"FFFF") else '0';   -- 9.36ms period for debounce
    CLK_28_MOUSE_109KHZ <= clk_28_div(7);                                                 -- 109 kHz clock 50% duty for ps2 mouse
    CLK_28_PS2_218KHZ <= clk_28_div(6);                                                   -- 218 kHz clock 50% duty cycle for ps2 keyboard
+--   CLK_28_PS2_218KHZ <= CLK_28;                                                   -- 218 kHz clock 50% duty cycle for ps2 keyboard
    CLK_28_MEMBRANE_EN <= '1' when clk_28_div(8 downto 0) = ('1' & X"FF") else '0';       -- complete scan every 2.5 scanlines (0.018ms per row)
    
    ------------------------------------------------------------
@@ -1325,24 +1361,27 @@ begin
 --	
 --	
 --	);
-	   
-   zxn_ram_b_req <= (zxn_ram_b_req_t xor sram_port_b_req) and not zxn_ram_a_req;   -- 0 = Port A (or nothing), 1 = Port B
-   --sram_addr <= zxn_ram_a_addr when zxn_ram_b_req = '0' else zxn_ram_b_addr;  
-   sram_addr <= (zxn_ram_a_addr(20) & zxn_ram_a_addr(0) & zxn_ram_a_addr(19 downto 1)) when zxn_ram_b_req = '0' else (zxn_ram_b_addr(20) & zxn_ram_b_addr(0) & zxn_ram_b_addr(19 downto 1));
-   
+
+   RAM_CLK <= CLK_28;
+
    -- Track port B request which operates on a toggled signal
-   
    process (CLK_28)
    begin
       if rising_edge(CLK_28) then
          if zxn_ram_b_req = '1' then
-            sram_port_b_req <= zxn_ram_b_req_t;				
+            sram_port_b_req <= zxn_ram_b_req_t;
          end if;
       end if;
    end process;
+   zxn_ram_b_req <= (zxn_ram_b_req_t xor sram_port_b_req) and not zxn_ram_a_req;   -- 0 = Port A (or nothing), 1 = Port B
+
+   sram_addr <= zxn_ram_a_addr when zxn_ram_b_req = '0' else zxn_ram_b_addr;  
+   --sram_addr <= (zxn_ram_a_addr(20) & zxn_ram_a_addr(0) & zxn_ram_a_addr(19 downto 1)) when zxn_ram_b_req = '0' else (zxn_ram_b_addr(20) & zxn_ram_b_addr(0) & zxn_ram_b_addr(19 downto 1));
+   RAM_ADDR_O <= sram_addr(18 downto 0);
+   sram_rd <= (zxn_ram_a_rd or not zxn_ram_a_req) when zxn_ram_b_req = '0' else '1';
+   RAM_WE_ALL_N_O <= '1' when reset = '1' else sram_rd;
 
    -- Select active sram chip
-   
    process (zxn_ram_a_req, zxn_ram_b_req, sram_addr)
    begin
       if zxn_ram_a_req = '1' or zxn_ram_b_req = '1' then
@@ -1356,43 +1395,84 @@ begin
          sram_cs_n <= (others => '1');
       end if;
    end process;
-   
+
+   process (CLK_28)
+   begin
+      if falling_edge(CLK_28) then
+         sram_oe2_n_active <= sram_oe_n_active;
+      end if;
+   end process;
+
+   RAM_OE_N_O <= (not sram_rd) and sram_oe_n_active and sram_oe2_n_active;
+   RAM_WE_BYTE_N_O <= sram_cs_n;
+   RAMA_DATA_IO_ZXDOS <= sram_data_active(7 downto 0) when sram_oe_n_active = '1' else (others => 'Z');
+   RAMB_DATA_IO_ZXDOS <= sram_data_active(7 downto 0) when sram_oe_n_active = '1' else (others => 'Z');
+   RAMC_DATA_IO_ZXDOS <= sram_data_active(7 downto 0) when sram_oe_n_active = '1' else (others => 'Z');
+   RAMD_DATA_IO_ZXDOS <= sram_data_active(7 downto 0) when sram_oe_n_active = '1' else (others => 'Z');
+
+   zxn_ram_a_di <= sram_port_a_do;
+   zxn_ram_b_di <= sram_port_b_do;
+   -- Select active data to zx
+   --process (sram_port_a_active, sram_addr_active)
+   process (CLK_28)
+   begin
+      if rising_edge(CLK_28) then
+         if ((sram_port_a_active = '1') and (sram_oe_n_active = '0')) then
+            case sram_addr_active(20 downto 19) is
+               when "00"   =>  sram_port_a_do <= RAMA_DATA_IO_ZXDOS;-- sram_cs_n <= "1110";
+               when "01"   =>  sram_port_a_do <= RAMB_DATA_IO_ZXDOS;-- sram_cs_n <= "1101";
+               when "10"   =>  sram_port_a_do <= RAMC_DATA_IO_ZXDOS;-- sram_cs_n <= "1011";
+               when others =>  sram_port_a_do <= RAMD_DATA_IO_ZXDOS;-- sram_cs_n <= "0111";
+            end case;
+--         else
+--            sram_port_a_do <= (others => '1');-- sram_cs_n <= (others => '1');
+         end if;
+      end if;
+   end process;
+   process (CLK_28)
+   begin
+      if rising_edge(CLK_28) then
+         --if (sram_port_b_active = '1' and not sram_oe_n_active) then
+         if ((sram_port_b_active and not sram_oe_n_active) = '1') then
+            case sram_addr_active(20 downto 19) is
+               when "00"   =>  sram_port_b_do <= RAMA_DATA_IO_ZXDOS;-- sram_cs_n <= "1110";
+               when "01"   =>  sram_port_b_do <= RAMB_DATA_IO_ZXDOS;-- sram_cs_n <= "1101";
+               when "10"   =>  sram_port_b_do <= RAMC_DATA_IO_ZXDOS;-- sram_cs_n <= "1011";
+               when others =>  sram_port_b_do <= RAMD_DATA_IO_ZXDOS;-- sram_cs_n <= "0111";
+            end case;
+--         else
+--            sram_port_b_do <= (others => '1');-- sram_cs_n <= (others => '1');
+         end if;
+      end if;
+   end process;
+
+
+
+
    sram_data_H <= sram_addr(19);
-   sram_rd <= (zxn_ram_a_rd or not zxn_ram_a_req) when zxn_ram_b_req = '0' else '1';
    
    -- Memory cycle
-   
    process (CLK_28)
    begin
       if rising_edge(CLK_28) then
          if reset = '1' then
-         
             sram_cs_n_active <= (others => '1');
-            sram_oe_n_active <= '0';
+            sram_oe_n_active <= '1';
             sram_addr_active <= (others => '0');
             sram_data_active <= (others => '0');
-            
 --				sram_addr_active_goma2 <= (others => '0'); --gomados
-				
             sram_port_a_active <= '0';
             sram_port_b_active <= '0';
-            
             sram_data_H_active <= '0';
-
          else
-
             sram_cs_n_active <= sram_cs_n;
             sram_oe_n_active <= not sram_rd;
-            sram_addr_active <= sram_addr(18 downto 0);
-            sram_data_active <= zxn_ram_a_do & zxn_ram_a_do;
-				
+            sram_addr_active <= sram_addr;
+            sram_data_active <= zxn_ram_a_do;
 --				sram_addr_active_goma2 <= sram_addr; --gomados
-				
             sram_port_a_active <= zxn_ram_a_req;
             sram_port_b_active <= zxn_ram_b_req;
-            
             sram_data_H_active <= sram_data_H;
-
          end if;
       end if;
    end process;
@@ -1438,50 +1518,46 @@ begin
       end if;
    end process;
    
-   sram_port_a_do <= sram_data_in_byte when sram_port_a_read = '1' else sram_port_a_dat;
-   sram_port_b_do <= sram_data_in_byte when sram_port_b_read = '1' else sram_port_b_dat;
-   
    -- Data out (W)
    -- 28MHz cycle is partitioned into five periods some of which will carry we signal
    
-   process (CLK_HDMI)
-   begin
-      if rising_edge(CLK_HDMI) then
-         if sram_oe_n_active = '1' and sram_we_line = "0000" then
-            sram_we_line <= "1111";
-            ram_we_n_o <= '0';
-         else
-            sram_we_line <= sram_we_line(2 downto 0) & '0';
-            if sram_we_line(3 downto 1) = "111" then
-               ram_we_n_o <= '0';
-            else
-               ram_we_n_o <= '1';
-            end if;
-         end if;
-      end if;
-   end process;
+--   process (CLK_HDMI)
+--   begin
+--      if rising_edge(CLK_HDMI) then
+--         if sram_oe_n_active = '1' and sram_we_line = "0000" then
+--            sram_we_line <= "1111";
+--            ram_we_n_o <= '0';
+--         else
+--            sram_we_line <= sram_we_line(2 downto 0) & '0';
+--            if sram_we_line(3 downto 1) = "111" then
+--               ram_we_n_o <= '0';
+--            else
+--               ram_we_n_o <= '1';
+--            end if;
+--         end if;
+--      end if;
+--   end process;
    
    -- zxdos write enable 2 x 512k SRAM
    --ram1_we_n_o <= '0' when ram_ce_n_o = "1110" else '1';
    --ram2_we_n_o <= '0' when ram_ce_n_o = "1101" else '1';
-   ram1_we_n_o <= ram_ce_n_o(0) or ram_we_n_o;
-   ram2_we_n_o <= ram_ce_n_o(1) or ram_we_n_o;
+   --ram1_we_n_o <= ram_ce_n_o(0) or ram_we_n_o;
+   --ram2_we_n_o <= ram_ce_n_o(1) or ram_we_n_o;
+   RAM1_WE_N_O <= sram_cs_n(0);
+   RAM2_WE_N_O <= sram_cs_n(1);
 	
 
    -- Connect I/O signals
    
    -- make sure xst is pushing registers into io blocks
    
-   ram_addr_o <= sram_addr_active;
 --   ram_data_io <= sram_data_active when sram_oe_n_active = '1' else (others => 'Z');
-   ram_oe_n_o <= sram_oe_n_active;
-   ram_ce_n_o <= sram_cs_n_active;
+   --ram_oe_n_o <= sram_oe_n_active;
+   --ram_ce_n_o <= sram_cs_n_active;
    
 --	ram_ce_zxdos <= '0' when  sram_cs_n_active = "1111"  else '1';
 
 	-----------------------------------------------------------  eliminado al poner memoria SDRAM-------------------
-    zxn_ram_a_di <= sram_port_a_do;
-    zxn_ram_b_di <= sram_port_b_do;
 	-----------------------------------------------------------------------
 
    -- zxdos memory
@@ -1489,11 +1565,7 @@ begin
 --	ram_addr_o <= sram_addr_active_goma2; --test memoria v4 -OK
 
 		
-   ram2_addr_o <= sram_addr_active;
-   ram2_data_io_zxdos <= sram_data_active(15 downto 8) when sram_oe_n_active = '1' else (others => 'Z');
-  ram_data_io_zxdos  <= sram_data_active(7 downto 0) when sram_oe_n_active = '1' else (others => 'Z');
-   ram_data_io(7 downto 0)  <= ram_data_io_zxdos when ram_ce_n_o = "1110" else (others => 'Z');
-   ram_data_io(15 downto 8) <= ram2_data_io_zxdos when ram_ce_n_o = "1101" else (others => 'Z');
+   --ram2_addr_o <= sram_addr_active;
 	
 --	ram_data_io(7 downto 0)  <= ram_data_output_zxdos when ram_ce_n_o = "1110" else (others => 'Z');
 --   ram_data_io(15 downto 8) <= ram_data_output_zxdos when ram_ce_n_o = "1101" else (others => 'Z');

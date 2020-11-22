@@ -1,0 +1,242 @@
+# -------------------------------------------------------------------------- #
+#
+# Copyright (C) 1991-2013 Altera Corporation
+# Your use of Altera Corporation's design tools, logic functions 
+# and other software and tools, and its AMPP partner logic 
+# functions, and any output files from any of the foregoing 
+# (including device programming or simulation files), and any 
+# associated documentation or information are expressly subject 
+# to the terms and conditions of the Altera Program License 
+# Subscription Agreement, Altera MegaCore Function License 
+# Agreement, or other applicable license agreement, including, 
+# without limitation, that your use is for the sole purpose of 
+# programming logic devices manufactured by Altera and sold by 
+# Altera or its authorized distributors.  Please refer to the 
+# applicable agreement for further details.
+#
+# -------------------------------------------------------------------------- #
+#
+# Quartus II 32-bit
+# Version 13.0.1 Build 232 06/12/2013 Service Pack 1 SJ Web Edition
+# Date created = 01:05:03  November 19, 2020
+#
+# -------------------------------------------------------------------------- #
+#
+# Notes:
+#
+# 1) The default values for assignments are stored in the file:
+#		zxnext_CycloneIII_assignment_defaults.qdf
+#    If this file doesn't exist, see file:
+#		assignment_defaults.qdf
+#
+# 2) Altera recommends that you do not modify this file. This
+#    file is updated automatically by the Quartus II software
+#    and any changes you make may be lost or overwritten.
+#
+# -------------------------------------------------------------------------- #
+
+
+set_global_assignment -name FAMILY "Cyclone III"
+set_global_assignment -name DEVICE EP3C40F324C6
+set_global_assignment -name TOP_LEVEL_ENTITY zxnext_CycloneIII
+set_global_assignment -name ORIGINAL_QUARTUS_VERSION "13.0 SP1"
+set_global_assignment -name PROJECT_CREATION_TIME_DATE "01:05:03  NOVEMBER 19, 2020"
+set_global_assignment -name LAST_QUARTUS_VERSION "13.0 SP1"
+set_global_assignment -name PROJECT_OUTPUT_DIRECTORY output_files
+set_global_assignment -name STRATIX_DEVICE_IO_STANDARD "2.5 V"
+
+set_global_assignment -name USE_CONFIGURATION_DEVICE OFF
+set_global_assignment -name CRC_ERROR_OPEN_DRAIN OFF
+set_global_assignment -name CYCLONEII_RESERVE_NCEO_AFTER_CONFIGURATION "USE AS REGULAR IO"
+set_global_assignment -name RESERVE_DATA0_AFTER_CONFIGURATION "USE AS REGULAR IO"
+set_global_assignment -name RESERVE_DATA1_AFTER_CONFIGURATION "USE AS REGULAR IO"
+set_global_assignment -name RESERVE_FLASH_NCE_AFTER_CONFIGURATION "USE AS REGULAR IO"
+set_global_assignment -name RESERVE_DCLK_AFTER_CONFIGURATION "USE AS REGULAR IO"
+set_global_assignment -name OUTPUT_IO_TIMING_NEAR_END_VMEAS "HALF VCCIO" -rise
+set_global_assignment -name OUTPUT_IO_TIMING_NEAR_END_VMEAS "HALF VCCIO" -fall
+set_global_assignment -name OUTPUT_IO_TIMING_FAR_END_VMEAS "HALF SIGNAL SWING" -rise
+set_global_assignment -name OUTPUT_IO_TIMING_FAR_END_VMEAS "HALF SIGNAL SWING" -fall
+set_global_assignment -name GENERATE_RBF_FILE ON
+
+set_location_assignment PIN_F17 -to CLK25
+
+set_location_assignment PIN_A5 -to LEDG[0]
+set_location_assignment PIN_B6 -to LEDG[1]
+set_location_assignment PIN_A6 -to LEDG[2]
+set_location_assignment PIN_A7 -to LEDG[3]
+set_location_assignment PIN_B7 -to LEDG[4]
+
+set_location_assignment PIN_H3 -to DATA0
+set_location_assignment PIN_H4 -to DCLK
+set_location_assignment PIN_L3 -to DCLK_A
+set_location_assignment PIN_M3 -to DCLK_B
+
+set_location_assignment PIN_V3 -to SRAM_DQC[8]
+set_location_assignment PIN_R4 -to SRAM_DQC[0]
+set_location_assignment PIN_U4 -to SRAM_DQC[1]
+set_location_assignment PIN_V4 -to SRAM_DQC[2]
+set_location_assignment PIN_U5 -to SRAM_DQC[3]
+set_location_assignment PIN_V5 -to SRAM_DQC[4]
+set_location_assignment PIN_P6 -to SRAM_DQC[5]
+set_location_assignment PIN_U6 -to SRAM_DQC[6]
+set_location_assignment PIN_V6 -to SRAM_DQC[7]
+set_location_assignment PIN_R11 -to SRAM_DQD[0]
+set_location_assignment PIN_U11 -to SRAM_DQD[1]
+set_location_assignment PIN_V11 -to SRAM_DQD[2]
+set_location_assignment PIN_P12 -to SRAM_DQD[3]
+set_location_assignment PIN_U12 -to SRAM_DQD[4]
+set_location_assignment PIN_R13 -to SRAM_DQD[5]
+set_location_assignment PIN_T13 -to SRAM_DQD[6]
+set_location_assignment PIN_U13 -to SRAM_DQD[7]
+set_location_assignment PIN_V13 -to SRAM_DQD[8]
+set_location_assignment PIN_M18 -to SRAM_A[2]
+set_location_assignment PIN_M17 -to SRAM_A[3]
+set_location_assignment PIN_M14 -to SRAM_A[4]
+set_location_assignment PIN_N15 -to SRAM_A[5]
+set_location_assignment PIN_L14 -to SRAM_A[1]
+set_location_assignment PIN_L15 -to SRAM_A[0]
+set_location_assignment PIN_R17 -to SRAM_A[20]
+set_location_assignment PIN_R18 -to SRAM_A[19]
+set_location_assignment PIN_P18 -to SRAM_A[6]
+set_location_assignment PIN_P17 -to SRAM_A[7]
+set_location_assignment PIN_R16 -to SRAM_A[8]
+set_location_assignment PIN_T18 -to SRAM_A[9]
+set_location_assignment PIN_T17 -to SRAM_A[10]
+set_location_assignment PIN_T16 -to SRAM_A[11]
+set_location_assignment PIN_U18 -to SRAM_A[12]
+set_location_assignment PIN_V18 -to SRAM_DQA[8]
+set_location_assignment PIN_V17 -to SRAM_DQA[0]
+set_location_assignment PIN_U17 -to SRAM_DQA[1]
+set_location_assignment PIN_V16 -to SRAM_DQA[2]
+set_location_assignment PIN_V15 -to SRAM_DQA[3]
+set_location_assignment PIN_U15 -to SRAM_DQA[4]
+set_location_assignment PIN_V14 -to SRAM_DQA[5]
+set_location_assignment PIN_U14 -to SRAM_DQA[6]
+set_location_assignment PIN_T14 -to SRAM_DQA[7]
+set_location_assignment PIN_P11 -to SRAM_DQB[0]
+set_location_assignment PIN_P10 -to SRAM_DQB[1]
+set_location_assignment PIN_P9 -to SRAM_DQB[2]
+set_location_assignment PIN_V8 -to SRAM_DQB[3]
+set_location_assignment PIN_U8 -to SRAM_DQB[4]
+set_location_assignment PIN_T8 -to SRAM_DQB[5]
+set_location_assignment PIN_R8 -to SRAM_DQB[6]
+set_location_assignment PIN_V7 -to SRAM_DQB[7]
+set_location_assignment PIN_U7 -to SRAM_DQB[8]
+set_location_assignment PIN_U3 -to SRAM_A[13]
+set_location_assignment PIN_T3 -to SRAM_A[14]
+set_location_assignment PIN_R3 -to SRAM_A[15]
+set_location_assignment PIN_V2 -to SRAM_A[16]
+set_location_assignment PIN_T4 -to SRAM_ADRLOADn
+set_location_assignment PIN_V1 -to SRAM_OEn
+set_location_assignment PIN_R1 -to SRAM_CLKENn
+set_location_assignment PIN_U1 -to SRAM_WEn
+set_location_assignment PIN_U2 -to SRAM_CLK
+set_location_assignment PIN_R5 -to SRAM_BWEAn
+set_location_assignment PIN_T6 -to SRAM_BWEBn
+set_location_assignment PIN_P7 -to SRAM_BWECn
+set_location_assignment PIN_P8 -to SRAM_BWEDn
+set_location_assignment PIN_T1 -to SRAM_CE1n
+set_location_assignment PIN_T2 -to SRAM_A[17]
+set_location_assignment PIN_R2 -to SRAM_A[18]
+
+set_location_assignment PIN_C3 -to PMODA_1
+set_location_assignment PIN_G1 -to PMODA_2
+set_location_assignment PIN_E1 -to PMODA_3
+set_location_assignment PIN_D1 -to PMODA_4
+# PMODA_7 from PMODD_2
+set_location_assignment PIN_L4 -to PMODA_7
+set_location_assignment PIN_G2 -to PMODA_8
+set_location_assignment PIN_E2 -to PMODA_9
+set_location_assignment PIN_D2 -to PMODA_10
+
+set_location_assignment PIN_D3 -to PMODB_1
+set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to PMODB_1
+set_location_assignment PIN_P1 -to PMODB_2
+set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to PMODB_2
+set_location_assignment PIN_M1 -to PMODB_3
+set_location_assignment PIN_L1 -to PMODB_4
+set_location_assignment PIN_H2 -to PMODB_7
+set_location_assignment PIN_F3 -to PMODB_8
+set_location_assignment PIN_P2 -to PMODB_9
+set_location_assignment PIN_M2 -to PMODB_10
+
+set_location_assignment PIN_K1 -to PMODC_1
+set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to PMODC_1
+# set_location_assignment PIN_ -to PMODC_2
+# set_location_assignment PIN_ -to PMODC_3
+# set_location_assignment PIN_ -to PMODC_4
+set_location_assignment PIN_L2 -to PMODC_7
+set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to PMODC_7
+set_location_assignment PIN_K2 -to PMODC_8
+set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to PMODC_8
+set_location_assignment PIN_H1 -to PMODC_9
+set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to PMODC_9
+# set_location_assignment PIN_ -to PMODC_10
+
+set_location_assignment PIN_N1 -to PMODD_1
+# to PMODA_7 # set_location_assignment PIN_L4 -to PMODD_2
+# set_location_assignment PIN_ -to PMODD_7
+# set_location_assignment PIN_ -to PMODD_8
+# set_location_assignment PIN_ -to PMODD_9
+# set_location_assignment PIN_ -to PMODD_10
+
+#set_global_assignment -name SIP_FILE clocks.sip
+set_global_assignment -name PARTITION_NETLIST_TYPE SOURCE -section_id Top
+set_global_assignment -name PARTITION_FITTER_PRESERVATION_LEVEL PLACEMENT_AND_ROUTING -section_id Top
+set_global_assignment -name PARTITION_COLOR 16764057 -section_id Top
+set_global_assignment -name MIN_CORE_JUNCTION_TEMP 0
+set_global_assignment -name MAX_CORE_JUNCTION_TEMP 85
+set_global_assignment -name SDC_FILE zxnext_CycloneIII.sdc
+set_global_assignment -name VERILOG_FILE "../src/synth-zxnext-Cyclone_V/zxnext_CycloneIII.v"
+set_global_assignment -name VHDL_FILE ../src/ram/BUFGMUX1.vhd
+set_global_assignment -name VHDL_FILE "../src/synth-zxnext-Cyclone_V/zxnext.vhd"
+set_global_assignment -name VHDL_FILE ../src/ram/tdpram.vhd
+set_global_assignment -name VHDL_FILE ../src/cpu/t80na.vhd
+set_global_assignment -name VHDL_FILE ../src/cpu/t80n_pack.vhd
+set_global_assignment -name VHDL_FILE ../src/cpu/t80n_mcode.vhd
+set_global_assignment -name VHDL_FILE ../src/cpu/t80n_alu.vhd
+set_global_assignment -name VHDL_FILE ../src/cpu/t80n.vhd
+set_global_assignment -name VHDL_FILE "../src/synth-zxnext-Cyclone_V/rom/bootrom.vhd"
+set_global_assignment -name VHDL_FILE ../src/audio/i2s/i2s_transmit.vhd
+set_global_assignment -name VHDL_FILE ../src/audio/i2s/i2s_slave.vhd
+set_global_assignment -name VHDL_FILE ../src/audio/i2s/i2s_receive.vhd
+set_global_assignment -name VHDL_FILE ../src/audio/i2s/i2s_master.vhd
+set_global_assignment -name VHDL_FILE ../src/ram/dpram2.vhd
+set_global_assignment -name VHDL_FILE ../src/video/vga/scan_convert.vhd
+set_global_assignment -name VHDL_FILE ../src/video/zxula_timing.vhd
+set_global_assignment -name VHDL_FILE ../src/video/zxula.vhd
+set_global_assignment -name VHDL_FILE ../src/video/tilemap.vhd
+set_global_assignment -name VHDL_FILE ../src/video/sprites.vhd
+set_global_assignment -name VHDL_FILE ../src/video/lores.vhd
+set_global_assignment -name VHDL_FILE ../src/video/layer2.vhd
+set_global_assignment -name VHDL_FILE ../src/audio/ym2149.vhd
+set_global_assignment -name VHDL_FILE ../src/audio/turbosound.vhd
+set_global_assignment -name VHDL_FILE ../src/audio/soundrive.vhd
+set_global_assignment -name VHDL_FILE ../src/audio/pwm.vhd
+set_global_assignment -name VHDL_FILE ../src/audio/i2s.vhd
+set_global_assignment -name VHDL_FILE ../src/audio/dac.vhd
+set_global_assignment -name VHDL_FILE ../src/audio/audio_mixer.vhd
+set_global_assignment -name VHDL_FILE ../src/misc/synchronize.vhd
+set_global_assignment -name VHDL_FILE ../src/misc/debounce.vhd
+set_global_assignment -name VHDL_FILE ../src/misc/asymmetrical_debounce.vhd
+set_global_assignment -name VHDL_FILE "../src/synth-zxnext-Cyclone_V/ZXNEXT_Cyclone_V.vhd"
+set_global_assignment -name QIP_FILE clocks.qip
+set_global_assignment -name VHDL_FILE ../src/input/membrane/membrane.vhd
+set_global_assignment -name VHDL_FILE ../src/input/membrane/emu_fnkeys.vhd
+set_global_assignment -name VHDL_FILE ../src/input/keyboard/ps2_keyb.vhd
+set_global_assignment -name VHDL_FILE ../src/input/keyboard/ps2_iobase.vhd
+set_global_assignment -name VHDL_FILE ../src/input/keyboard/keymaps.vhd
+set_global_assignment -name VERILOG_FILE ../src/input/ps2_mouse.v
+set_global_assignment -name VHDL_FILE ../src/ram/spram.vhd
+set_global_assignment -name VHDL_FILE ../src/ram/sdpram.vhd
+set_global_assignment -name VHDL_FILE ../src/ram/dpram.vhd
+set_global_assignment -name VHDL_FILE ../src/device/multiface.vhd
+set_global_assignment -name VHDL_FILE ../src/device/dma.vhd
+set_global_assignment -name VHDL_FILE ../src/device/divmmc.vhd
+set_global_assignment -name VHDL_FILE ../src/device/copper.vhd
+set_global_assignment -name VHDL_FILE ../src/serial/uart.vhd
+set_global_assignment -name VHDL_FILE ../src/serial/spi_master.vhd
+set_global_assignment -name VHDL_FILE ../src/serial/fifop.vhd
+set_global_assignment -name POWER_PRESET_COOLING_SOLUTION "23 MM HEAT SINK WITH 200 LFPM AIRFLOW"
+set_global_assignment -name POWER_BOARD_THERMAL_MODEL "NONE (CONSERVATIVE)"
+set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
