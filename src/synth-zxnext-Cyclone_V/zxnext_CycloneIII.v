@@ -117,8 +117,8 @@ ZXNEXT_Cyclone_V ZXNEXT_Cyclone_V(
    //-- SRAM1
   .RAMA_DATA_IO_ZXDOS  (SRAM_DQA[7:0]), // : inout std_logic_vector(7 downto 0)  := (others => 'Z');
   .RAMB_DATA_IO_ZXDOS  (SRAM_DQB[7:0]), // : inout std_logic_vector(7 downto 0)  := (others => 'Z');
-  .RAMC_DATA_IO_ZXDOS  (SRAM_DQB[7:0]), // : inout std_logic_vector(7 downto 0)  := (others => 'Z');
-  .RAMD_DATA_IO_ZXDOS  (SRAM_DQB[7:0]), // : inout std_logic_vector(7 downto 0)  := (others => 'Z');
+  .RAMC_DATA_IO_ZXDOS  (SRAM_DQC[7:0]), // : inout std_logic_vector(7 downto 0)  := (others => 'Z');
+  .RAMD_DATA_IO_ZXDOS  (SRAM_DQD[7:0]), // : inout std_logic_vector(7 downto 0)  := (others => 'Z');
 //-- PS2
   .ps2_clk_io  (PMODC_9), //        : inout std_logic                      := 'Z';
   .ps2_data_io  (PMODC_1), //       : inout std_logic                      := 'Z';
