@@ -179,6 +179,9 @@ entity zxnext is
       o_RAM_B_REQ_T        : out std_logic;                       -- toggle indicates memory request
       i_RAM_B_DI           : in std_logic_vector(7 downto 0);     -- data read from memory
       
+      -- CLK 3.5 and 7 MHz hack
+      i_CLK_WAIT_n         : in std_logic;
+      
       -- EXPANSION BUS
       
       o_BUS_ADDR           : out std_logic_vector(15 downto 0);   -- unidirectional address bus = no external DMA for now
@@ -1600,7 +1603,7 @@ begin
    cpu_a <= dma_a when dma_holds_bus = '1' else z80_a;
    cpu_do <= dma_do when dma_holds_bus = '1' else z80_do;
 
-   z80_wait_n <= '0' when (ula_wait_n = '0') or (ulap_wait_n = '0') or (sram_wait_n = '0') or (i_BUS_WAIT_n = '0' and expbus_eff_en = '1') else '1';
+   z80_wait_n <= '0' when (ula_wait_n = '0') or (ulap_wait_n = '0') or (sram_wait_n = '0') or (i_BUS_WAIT_n = '0' and expbus_eff_en = '1') or (i_CLK_WAIT_n = '0') else '1';
    z80_int_n <= ula_int_n and (i_BUS_INT_n or (not expbus_eff_en) or expbus_eff_disable_io);
    z80_nmi_n <= nmi_generate_n;
    z80_busrq_n <= dma_busrq_n;

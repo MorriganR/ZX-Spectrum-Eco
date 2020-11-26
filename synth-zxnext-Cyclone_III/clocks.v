@@ -135,9 +135,9 @@ module clocks (
 		altpll_component.clk3_duty_cycle = 50,
 		altpll_component.clk3_multiply_by = 7,
 		altpll_component.clk3_phase_shift = "0",
-		altpll_component.clk4_divide_by = 50,
+		altpll_component.clk4_divide_by = 25,
 		altpll_component.clk4_duty_cycle = 50,
-		altpll_component.clk4_multiply_by = 7,
+		altpll_component.clk4_multiply_by = 56,
 		altpll_component.clk4_phase_shift = "0",
 		altpll_component.compensate_clock = "CLK0",
 		altpll_component.inclk0_input_frequency = 40000,
@@ -216,7 +216,7 @@ endmodule
 // Retrieval info: PRIVATE: DIV_FACTOR1 NUMERIC "25"
 // Retrieval info: PRIVATE: DIV_FACTOR2 NUMERIC "25"
 // Retrieval info: PRIVATE: DIV_FACTOR3 NUMERIC "25"
-// Retrieval info: PRIVATE: DIV_FACTOR4 NUMERIC "50"
+// Retrieval info: PRIVATE: DIV_FACTOR4 NUMERIC "25"
 // Retrieval info: PRIVATE: DUTY_CYCLE0 STRING "50.00000000"
 // Retrieval info: PRIVATE: DUTY_CYCLE1 STRING "50.00000000"
 // Retrieval info: PRIVATE: DUTY_CYCLE2 STRING "50.00000000"
@@ -226,7 +226,7 @@ endmodule
 // Retrieval info: PRIVATE: EFF_OUTPUT_FREQ_VALUE1 STRING "28.000000"
 // Retrieval info: PRIVATE: EFF_OUTPUT_FREQ_VALUE2 STRING "14.000000"
 // Retrieval info: PRIVATE: EFF_OUTPUT_FREQ_VALUE3 STRING "7.000000"
-// Retrieval info: PRIVATE: EFF_OUTPUT_FREQ_VALUE4 STRING "3.500000"
+// Retrieval info: PRIVATE: EFF_OUTPUT_FREQ_VALUE4 STRING "56.000000"
 // Retrieval info: PRIVATE: EXPLICIT_SWITCHOVER_COUNTER STRING "0"
 // Retrieval info: PRIVATE: EXT_FEEDBACK_RADIO STRING "0"
 // Retrieval info: PRIVATE: GLOCKED_COUNTER_EDIT_CHANGED STRING "1"
@@ -261,13 +261,13 @@ endmodule
 // Retrieval info: PRIVATE: MULT_FACTOR1 NUMERIC "28"
 // Retrieval info: PRIVATE: MULT_FACTOR2 NUMERIC "14"
 // Retrieval info: PRIVATE: MULT_FACTOR3 NUMERIC "7"
-// Retrieval info: PRIVATE: MULT_FACTOR4 NUMERIC "7"
+// Retrieval info: PRIVATE: MULT_FACTOR4 NUMERIC "56"
 // Retrieval info: PRIVATE: NORMAL_MODE_RADIO STRING "1"
 // Retrieval info: PRIVATE: OUTPUT_FREQ0 STRING "28.00000000"
 // Retrieval info: PRIVATE: OUTPUT_FREQ1 STRING "28.00000000"
 // Retrieval info: PRIVATE: OUTPUT_FREQ2 STRING "14.00000000"
 // Retrieval info: PRIVATE: OUTPUT_FREQ3 STRING "7.00000000"
-// Retrieval info: PRIVATE: OUTPUT_FREQ4 STRING "3.50000000"
+// Retrieval info: PRIVATE: OUTPUT_FREQ4 STRING "56.00000000"
 // Retrieval info: PRIVATE: OUTPUT_FREQ_MODE0 STRING "0"
 // Retrieval info: PRIVATE: OUTPUT_FREQ_MODE1 STRING "0"
 // Retrieval info: PRIVATE: OUTPUT_FREQ_MODE2 STRING "0"
@@ -350,9 +350,9 @@ endmodule
 // Retrieval info: CONSTANT: CLK3_DUTY_CYCLE NUMERIC "50"
 // Retrieval info: CONSTANT: CLK3_MULTIPLY_BY NUMERIC "7"
 // Retrieval info: CONSTANT: CLK3_PHASE_SHIFT STRING "0"
-// Retrieval info: CONSTANT: CLK4_DIVIDE_BY NUMERIC "50"
+// Retrieval info: CONSTANT: CLK4_DIVIDE_BY NUMERIC "25"
 // Retrieval info: CONSTANT: CLK4_DUTY_CYCLE NUMERIC "50"
-// Retrieval info: CONSTANT: CLK4_MULTIPLY_BY NUMERIC "7"
+// Retrieval info: CONSTANT: CLK4_MULTIPLY_BY NUMERIC "56"
 // Retrieval info: CONSTANT: CLK4_PHASE_SHIFT STRING "0"
 // Retrieval info: CONSTANT: COMPENSATE_CLOCK STRING "CLK0"
 // Retrieval info: CONSTANT: INCLK0_INPUT_FREQUENCY NUMERIC "40000"

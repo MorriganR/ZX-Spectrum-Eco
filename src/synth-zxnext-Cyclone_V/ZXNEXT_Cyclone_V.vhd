@@ -419,7 +419,7 @@ architecture rtl of ZXNEXT_Cyclone_V is
    signal CLK_7                  : std_logic;
    signal CLK_HDMI               : std_logic;
    signal CLK_HDMI_n             : std_logic;
-	signal clk112						: std_logic;
+	signal CLK_56						: std_logic;
    signal clock_sdram_s          : std_logic;
 	signal pll_locked					: std_logic;
 	
@@ -660,6 +660,8 @@ architecture rtl of ZXNEXT_Cyclone_V is
    signal zxn_uart0_tx           : std_logic;
    signal zxn_uart0_rx           : std_logic;
    
+   signal zxn_clk_wait_n         : std_logic;
+
    -- expansion bus
    
    signal zxn_bus_di             : std_logic_vector(7 downto 0);
@@ -1133,7 +1135,7 @@ begin
 --			outclk_2 => CLK_14,             -- 14 MHz
 --			outclk_3 => CLK_7,              -- 7 MHz
 --			outclk_4 => CLK_HDMI,           -- 28 * 5
---			outclk_5 => clk112,             -- 28 * 4 = 112  
+--			outclk_5 => CLK_56,             -- 28 * 4 = 112  
 --			--outclk_6 => sdram_clk_o,        -- 28 * 4 = 112  -90
 --			locked   => pll_locked
 --			);
@@ -1147,7 +1149,7 @@ begin
 			c1 => CLK_28_n,           -- 28 Mhz inverted
 			c2 => CLK_14,             -- 14 MHz
 			c3 => CLK_7,              -- 7 MHz
-			c4 => CLK_HDMI,           -- 3.5 MHz
+			c4 => CLK_56,             -- 56 MHz
 			locked   => pll_locked
 			);
 
@@ -1165,7 +1167,6 @@ begin
       end if;
    end process;
 
-   CLK_CPU <= CLK_14;
 --   BUFGMUX1_i0 : entity work.BUFGMUX1
 --   port map
 --   (
@@ -1200,6 +1201,22 @@ begin
 --   );
 --
 --	CLK_CPU <= CLK_i1 when zxn_cpu_speed(1) = '1' else CLK_i0;
+
+   CLK_CPU <= CLK_28;
+
+   -- zxn_clk_wait_n
+   zxn_clk_wait_n <= '1';
+--   process (CLK_28)
+--   begin
+--      if rising_edge(CLK_28) then
+--         case zxn_cpu_speed(1 downto 0) is
+--            when "00"   =>  zxn_clk_wait_n <= clk_28_div(3) and clk_28_div(2) and clk_28_div(1);
+--            when "01"   =>  zxn_clk_wait_n <= clk_28_div(3) and clk_28_div(2);
+--            when "10"   =>  zxn_clk_wait_n <= clk_28_div(3);
+--            when others =>  zxn_clk_wait_n <= '1';
+--         end case;
+--      end if;
+--   end process;
 	
    -- Clock Enables
    
@@ -1302,7 +1319,7 @@ begin
 --		freq_g		=> 112
 --	)
 --	port map (
---		clock_i		=> clk112,
+--		clock_i		=> CLK_56,
 --		reset_i		=> rst,
 --		refresh_i	=> '1',
 --		-- Static RAM bus
@@ -1325,7 +1342,7 @@ begin
 --		mem_data_io	=> sdram_da_io
 --	);
 
---	sdram_clk_o <= clk112; 
+--	sdram_clk_o <= CLK_56; 
 --
 --	ram: sdram
 --	port map (
@@ -1340,7 +1357,7 @@ begin
 --	sd_cas    =>  sdram_cas_o,
 --
 --	-- system interface
---	clk       =>  clk112,
+--	clk       =>  CLK_56,
 --	clkref    =>  CLK_28,
 --	init      =>  not pll_locked,
 --
@@ -1362,12 +1379,12 @@ begin
 --	
 --	);
 
-   RAM_CLK <= CLK_28;
+   RAM_CLK <= CLK_56;
 
    -- Track port B request which operates on a toggled signal
-   process (CLK_28)
+   process (CLK_56)
    begin
-      if rising_edge(CLK_28) then
+      if rising_edge(CLK_56) then
          if zxn_ram_b_req = '1' then
             sram_port_b_req <= zxn_ram_b_req_t;
          end if;
@@ -1396,9 +1413,9 @@ begin
       end if;
    end process;
 
-   process (CLK_28)
+   process (CLK_56)
    begin
-      if falling_edge(CLK_28) then
+      if falling_edge(CLK_56) then
          sram_oe2_n_active <= sram_oe_n_active;
       end if;
    end process;
@@ -1414,9 +1431,9 @@ begin
    zxn_ram_b_di <= sram_port_b_do;
    -- Select active data to zx
    --process (sram_port_a_active, sram_addr_active)
-   process (CLK_28)
+   process (CLK_56)
    begin
-      if rising_edge(CLK_28) then
+      if rising_edge(CLK_56) then
          if ((sram_port_a_active = '1') and (sram_oe_n_active = '0')) then
             case sram_addr_active(20 downto 19) is
                when "00"   =>  sram_port_a_do <= RAMA_DATA_IO_ZXDOS;-- sram_cs_n <= "1110";
@@ -1429,9 +1446,9 @@ begin
          end if;
       end if;
    end process;
-   process (CLK_28)
+   process (CLK_56)
    begin
-      if rising_edge(CLK_28) then
+      if rising_edge(CLK_56) then
          --if (sram_port_b_active = '1' and not sram_oe_n_active) then
          if ((sram_port_b_active and not sram_oe_n_active) = '1') then
             case sram_addr_active(20 downto 19) is
@@ -1452,9 +1469,9 @@ begin
    sram_data_H <= sram_addr(19);
    
    -- Memory cycle
-   process (CLK_28)
+   process (CLK_56)
    begin
-      if rising_edge(CLK_28) then
+      if rising_edge(CLK_56) then
          if reset = '1' then
             sram_cs_n_active <= (others => '1');
             sram_oe_n_active <= '1';
@@ -1479,16 +1496,16 @@ begin
    
    -- Data in (R)
    
-   process (CLK_28)
+   process (CLK_56)
    begin
-      if rising_edge(CLK_28) then
+      if rising_edge(CLK_56) then
          sram_data_in <= ram_data_io;
       end if;
    end process;
    
-   process (CLK_28)
+   process (CLK_56)
    begin
-      if rising_edge(CLK_28) then
+      if rising_edge(CLK_56) then
          sram_port_a_read <= sram_port_a_active and not sram_oe_n_active;
          sram_port_b_read <= sram_port_b_active and not sram_oe_n_active;
          sram_data_H_read <= sram_data_H_active;
@@ -1500,18 +1517,18 @@ begin
    
    --
    
-   process (CLK_28)
+   process (CLK_56)
    begin
-      if rising_edge(CLK_28) then
+      if rising_edge(CLK_56) then
          if sram_port_a_read = '1' then
             sram_port_a_dat <= sram_data_in_byte;
          end if;
       end if;
    end process;
    
-   process (CLK_28)
+   process (CLK_56)
    begin
-      if rising_edge(CLK_28) then
+      if rising_edge(CLK_56) then
          if sram_port_b_read = '1' then
             sram_port_b_dat <= sram_data_in_byte;
          end if;
@@ -2569,6 +2586,9 @@ begin
       o_RAM_B_ADDR         => zxn_ram_b_addr,
       o_RAM_B_REQ_T        => zxn_ram_b_req_t,
       i_RAM_B_DI           => zxn_ram_b_di,
+      
+      -- CLK 3.5 and 7 MHz hack
+      i_CLK_WAIT_n         => zxn_clk_wait_n,
       
       -- EXPANSION BUS
       
